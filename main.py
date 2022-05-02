@@ -1,5 +1,6 @@
 # Assignment 3 Dairy Application
 
+
 def GET_DATE():
     while(1):
         Valid = True
@@ -82,3 +83,38 @@ def GET_PRIORITY():
             break
         print("Invalid input. Please try again")
     return PRIORITY
+
+
+Diary=[]
+Diary.append({"date": '23/05/1987', 'StartTime': int(10), 'EndTime': int(12), 'Description': 'My B\'day','priority': 'High'})
+
+menu=True
+while menu:
+    if len(Diary) > 0:
+        for entry in Diary:
+            print('\n')
+            print('Appointment Info: \n' + 'Date: ' +  entry['date' ], 'Start Time: ' + str(entry['StartTime']), 'End Time: ' + str(entry['EndTime']), entry['Description'], entry['priority'] )
+    else:
+        print('\n Select Add new record to create a new appointment')        
+    print("""
+    1. Add Record
+    2. Sort Records
+    3. Exit
+    """)
+
+
+    Menu_Response_rawInput=input("Dear Diary, I would like to: \n")
+    if Menu_Response_rawInput == "1":
+        # GET_DATE()
+        # GET_START_TIME()
+        # GET_END_TIME()
+        # GET_DESCRIPTOR()
+        # GET_PRIORITY()
+        print('\n Adding A Record')
+    elif Menu_Response_rawInput == '2':
+        print('\n Sorting Your Records')
+    elif Menu_Response_rawInput == '3':
+        exit()
+    else:
+        print('\n I\'m sorry that response is not recognised please try again')
+        

@@ -1,5 +1,55 @@
 # Assignment 3 Dairy Application
+##import calls##
+import time
+################
 
+
+####################################################
+# VALIDATE_TIME(start,end,date)
+# ##########	
+# inputs:
+#   start, int:
+#       The hour of the start time (not validated)
+#   end, int:
+#       The hour of the end time (not validated)
+#   date, str[10],("dd/mm/yyyy"):
+#       The date input from the user (validated)
+# outputs:
+# 	(unnamed), bool:
+#       The validity of the inputed time as a True/False boolean.
+# ##########
+#   Checks the start and end time for validity (start>=7 end<=22 and start<end).
+#   Considering date and time, checks the time is in the futer. (Requirse librarie time).
+#   If both checks pass outputs True. If ether fail an error is displayed and False is passed
+# ##########
+# Author: Timothy van den Bosch
+# Date: 02/05/2022
+# History
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
+#        Completed function
+####################################################
+def VALIDATE_TIME(start, end, date):
+    if not (start>=7 and end <=22 and start<end):
+        print("Time not valid: Start and/or end times do not meet conditions")
+        return False
+    DDay = int(date[0:2])-time.localtime().tm_mday
+    DMonth = int(date[3:5])-time.localtime().tm_mon
+    DYear = int(date[6:10])-time.localtime().tm_year
+    DStart = start-time.localtime().tm_hour
+    if DYear > 0:
+        return True
+    if DYear==0: 
+        if DMonth>0:
+            return True
+        if DMonth==0:
+            if DDay>0:
+                return True
+            if DDay==0:
+                if DStart > 0:
+                    return True
+    print("Time not valid: Given time is in the past.")            
+    return False 
+    
 ####################################################
 # GET_DATE()
 # ##########	
@@ -12,7 +62,7 @@
 #   Takes the user input from a promt and validates format before returning.
 # ##########
 # Author: Timothy van den Bosch
-# Date of 02/05/2022
+# Date: 02/05/2022
 # History
 # 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
@@ -49,7 +99,7 @@ def GET_DATE():
 #   Takes the user input from a promt and validates format (i.e. is a at most a 2 diget number) before returning.
 # ##########
 # Author: Timothy van den Bosch
-# Date of 02/05/2022
+# Date: 02/05/2022
 # History
 # 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
@@ -83,7 +133,7 @@ def GET_START_TIME():
 #   Takes the user input from a promt and validates format (i.e. is a at most a 2 diget number) before returning.
 # ##########
 # Author: Timothy van den Bosch
-# Date of 02/05/2022
+# Date: 02/05/2022
 # History
 # 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
@@ -118,7 +168,7 @@ def GET_END_TIME():
 #   It will append spaces until the string is exactly 30 charicters long before returning.
 # ##########
 # Author: Timothy van den Bosch
-# Date of 02/05/2022
+# Date: 02/05/2022
 # History
 # 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
@@ -148,7 +198,7 @@ def GET_DESCRIPTOR():
 #    Returns "HIGH  ", "MEDIUM" or "LOW   " based on the user input 
 # ##########
 # Author: Timothy van den Bosch
-# Date of 02/05/2022
+# Date: 02/05/2022
 # History
 # 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
@@ -171,9 +221,12 @@ def GET_PRIORITY():
     return PRIORITY
 
 
-Diary=[]
-Diary.append({"date": '23/05/1987', 'StartTime': int(10), 'EndTime': int(12), 'Description': 'My B\'day','priority': 'High'})
 
+                              
+
+Diary=[]
+Diary.append({"date": "23/05/1987", "StartTime": int(10), "EndTime": int(12), "Description": 'My B\'day','priority': 'High'})
+print(Diary[0]["date"])
 menu=True
 while menu:
     if len(Diary) > 0:
@@ -204,3 +257,7 @@ while menu:
     else:
         print('\n I\'m sorry that response is not recognised please try again')
         
+        
+        
+        
+    

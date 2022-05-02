@@ -86,8 +86,8 @@ def GET_PRIORITY():
 
 
 Diary=[]
-Diary.append({"date": '23/05/1987', 'StartTime': int(10), 'EndTime': int(12), 'Description': 'My B\'day','priority': 'High'})
-
+Diary.append({"date": "23/05/1987", "StartTime": int(10), "EndTime": int(12), "Description": 'My B\'day','priority': 'High'})
+print(Diary[0]["date"])
 menu=True
 while menu:
     if len(Diary) > 0:
@@ -118,3 +118,10 @@ while menu:
     else:
         print('\n I\'m sorry that response is not recognised please try again')
         
+        
+        
+        
+        
+DATE="20/03/2015"
+DAY=int(DATE[0:2]) 
+Month=int(DATE[3:5]) 

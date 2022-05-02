@@ -15,7 +15,7 @@ import time
 #   date, str[10],("dd/mm/yyyy"):
 #       The date input from the user (validated)
 # outputs:
-# 	Valid, bool:
+# 	(unnamed), bool:
 #       The validity of the inputed time as a True/False boolean.
 # ##########
 #   Checks the start and end time for validity (start>=7 end<=22 and start<end).
@@ -23,7 +23,7 @@ import time
 #   If both checks pass outputs True. If ether fail an error is displayed and False is passed
 # ##########
 # Author: Timothy van den Bosch
-# Date: 01/05/2022
+# Date: 02/05/2022
 # History
 # 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
@@ -62,9 +62,9 @@ def VALIDATE_TIME(start, end, date):
 #   Takes the user input from a promt and validates format before returning.
 # ##########
 # Author: Timothy van den Bosch
-# Date: 01/05/2022
+# Date: 02/05/2022
 # History
-# 	Rev 1.0: 01/05/2022, Timothy van den Bosch
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
 ####################################################
 def GET_DATE():
@@ -99,9 +99,9 @@ def GET_DATE():
 #   Takes the user input from a promt and validates format (i.e. is a at most a 2 diget number) before returning.
 # ##########
 # Author: Timothy van den Bosch
-# Date: 01/05/2022
+# Date: 02/05/2022
 # History
-# 	Rev 1.0: 01/05/2022, Timothy van den Bosch
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
 ####################################################
 def GET_START_TIME():
@@ -133,9 +133,9 @@ def GET_START_TIME():
 #   Takes the user input from a promt and validates format (i.e. is a at most a 2 diget number) before returning.
 # ##########
 # Author: Timothy van den Bosch
-# Date: 01/05/2022
+# Date: 02/05/2022
 # History
-# 	Rev 1.0: 01/05/2022, Timothy van den Bosch
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
 ####################################################
 def GET_END_TIME():
@@ -168,9 +168,9 @@ def GET_END_TIME():
 #   It will append spaces until the string is exactly 30 charicters long before returning.
 # ##########
 # Author: Timothy van den Bosch
-# Date: 01/05/2022
+# Date: 02/05/2022
 # History
-# 	Rev 1.0: 01/05/2022, Timothy van den Bosch
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
 ####################################################
 def GET_DESCRIPTOR():
@@ -198,9 +198,9 @@ def GET_DESCRIPTOR():
 #    Returns "HIGH  ", "MEDIUM" or "LOW   " based on the user input 
 # ##########
 # Author: Timothy van den Bosch
-# Date: 01/05/2022
+# Date: 02/05/2022
 # History
-# 	Rev 1.0: 01/05/2022, Timothy van den Bosch
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
 ####################################################
 def GET_PRIORITY():

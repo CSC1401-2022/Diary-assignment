@@ -1,6 +1,22 @@
 # Assignment 3 Dairy Application
 
-
+####################################################
+# GET_DATE()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	Date_rawInput, str:
+#       The Date given by the user in the following format (dd/mm/yyyy)
+# ##########
+#   Takes the user input from a promt and validates format before returning.
+# ##########
+# Author: Timothy van den Bosch
+# Date of 02/05/2022
+# History
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
+#        Completed function
+####################################################
 def GET_DATE():
     while(1):
         Valid = True
@@ -21,6 +37,23 @@ def GET_DATE():
         print("Invalid input format. Please try again")
     return Date_rawInput
 
+####################################################
+# GET_START_TIME()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	Start_Time_rawInput, int:
+#       The start time of an event given by the user as a number
+# ##########
+#   Takes the user input from a promt and validates format (i.e. is a at most a 2 diget number) before returning.
+# ##########
+# Author: Timothy van den Bosch
+# Date of 02/05/2022
+# History
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
+#        Completed function
+####################################################
 def GET_START_TIME():
     while(1):
         Valid = True
@@ -38,6 +71,23 @@ def GET_START_TIME():
         print("Invalid input format. Please try again")
     return int(Start_Time_rawInput)
 
+####################################################
+# GET_END_TIME()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	End_Time_rawInput, int:
+#       The end time of an event given by the user as a number
+# ##########
+#   Takes the user input from a promt and validates format (i.e. is a at most a 2 diget number) before returning.
+# ##########
+# Author: Timothy van den Bosch
+# Date of 02/05/2022
+# History
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
+#        Completed function
+####################################################
 def GET_END_TIME():
     while(1):
         Valid = True
@@ -55,10 +105,28 @@ def GET_END_TIME():
         print("Invalid input format. Please try again")
     return int(End_Time_rawInput)
 
+####################################################
+# GET_DESCRIPTOR()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	DESCRIPTOR_rawInput, str:
+#       The discription of an event given by the user as a string 30 charicters long
+# ##########
+#   Takes the user input from a promt and validates format (i.e. is <=30 charicters long).
+#   It will append spaces until the string is exactly 30 charicters long before returning.
+# ##########
+# Author: Timothy van den Bosch
+# Date of 02/05/2022
+# History
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
+#        Completed function
+####################################################
 def GET_DESCRIPTOR():
     while(1):
         #retreive date
-        DESCRIPTOR_rawInput = input("Please enter a name for the event (30 charictors maximum)\n")
+        DESCRIPTOR_rawInput = input("Please enter a name for the event (30 charicters maximum)\n")
         #varify input format
         if len(DESCRIPTOR_rawInput)<31:
             while len(DESCRIPTOR_rawInput)<30:
@@ -67,6 +135,24 @@ def GET_DESCRIPTOR():
         print("To many charicters. Please try again")
     return DESCRIPTOR_rawInput
 
+####################################################
+# GET_PRIORITY()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	PRIORITY, str:
+#       The Priority of an event given by the user as a string 6 charicters long
+# ##########
+#   Takes the user input from a promt and validates format. The input is not case sensitive and excepts "high", "h","medium", "h","low" and "l".
+#    Returns "HIGH  ", "MEDIUM" or "LOW   " based on the user input 
+# ##########
+# Author: Timothy van den Bosch
+# Date of 02/05/2022
+# History
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
+#        Completed function
+####################################################
 def GET_PRIORITY():
     while(1):
         #retreive date

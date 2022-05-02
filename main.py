@@ -114,7 +114,7 @@ while menu:
     elif Menu_Response_rawInput == '2':
         print('\n Sorting Your Records')
     elif Menu_Response_rawInput == '3':
-        exit()
+        break
     else:
         print('\n I\'m sorry that response is not recognised please try again')
         

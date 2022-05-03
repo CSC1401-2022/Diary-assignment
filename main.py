@@ -44,7 +44,8 @@ YEAR_END = 10
 # ##########
 #   Searches through Diary[] and checks for overlappong apointments between the
 #   new entry and current entries. Requirse a global array of strings named Diary 
-#   formated "[6];[10];[2];[2];[30]" (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
+#   formated "Priority[6];Date[10];start time[2];end time[2];discription[30]"
+#               (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
 # ##########
 # Author: Timothy van den Bosch
 # Date: 03/05/2022
@@ -287,7 +288,30 @@ def GET_PRIORITY():
         print("Invalid input. Please try again")
     return PRIORITY
                        
-
+####################################################
+# ADD_RECORD()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	None
+# ##########
+#   Retrives event infomation from user using the GET_ functions. 
+#   Validiates the retrived event infomation using the VALIDATE_ functions
+#   Creates a string describing the new event in the following format 
+#       "Priority[6];Date[10];start time[2];end time[2];discription[30]"
+#       (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
+#   Appends the string to array Diary[]
+# ##########
+# Author: --
+# Date: --
+# History
+# 	Rev --: --/--/----, --
+#        --
+####################################################
+def ADD_RECORD():
+    print("Adding diary")#temp
+    
 
 menu=True
 while menu:
@@ -305,13 +329,8 @@ while menu:
 
 
     Menu_Response_rawInput=input("Dear Diary, I would like to: \n")
-    if Menu_Response_rawInput == "1":
-        # GET_DATE()
-        # GET_START_TIME()
-        # GET_END_TIME()
-        # GET_DESCRIPTOR()
-        # GET_PRIORITY()
-        print('\n Adding A Record')
+    if Menu_Response_rawInput == '1':
+        ADD_RECORD()
     elif Menu_Response_rawInput == '2':
         print('\n Sorting Your Records')
     elif Menu_Response_rawInput == '3':

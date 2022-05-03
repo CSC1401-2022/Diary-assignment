@@ -5,9 +5,9 @@ import time
 ##Global Variables##
 #                 10        20        30        40 
 #       012345678901234567890123456789012345678901234567890123
-Diary=["HIGH  ;10/06/2022;07;22;Testing entry one             ",
-       "MEDIUM;01/09/2022;12;22;Testing entry two             ",
-       "LOW   ;20/07/2023;10;15;Testing entry three           "]
+Diary=["MEDIUM;10/06/2022;07;22;Testing entry one             ",
+       "LOW   ;01/09/2022;12;22;Testing entry two             ",
+       "HIGH  ;20/07/2023;10;15;Testing entry three           "]
 ##constants##
 PRIORITY_START = 0
 PRIORITY_END = 6
@@ -297,7 +297,7 @@ def GET_PRIORITY():
 # 	None
 # ##########
 #   Retrives event infomation from user using the GET_ functions. 
-#   Validiates the retrived event infomation using the VALIDATE_ functions
+#   Validiates the retreaved event infomation using the VALIDATE_ functions
 #   Creates a string describing the new event in the following format 
 #       "Priority[6];Date[10];start time[2];end time[2];discription[30]"
 #       (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
@@ -311,6 +311,69 @@ def GET_PRIORITY():
 ####################################################
 def ADD_RECORD():
     print("Adding diary")#temp
+    
+####################################################
+# SORT_RECORD()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	None
+# ##########
+#   Retreaves the argument of the sort. 
+#   pulls the argument from Diary with index number.
+#   quantifies the argument
+#   performs a bubble sort on the argument
+#   Result of bubble sort is a sorted Diary variable.
+#   Result is displayed using the print function
+#   loops untill END is passed (case insensitive)
+# ##########
+# Author: Timothy van den Bosch
+# Date: 03/05/2022
+# History
+# 	Rev 1.0: 03/05/2022, Timothy van den Bosch
+#        Function complete
+####################################################
+def SORT_RECORD():  
+    print("Sorting Diary:")
+    if not(len(Diary) > 0):
+        print("Diary is empty")
+        print("Exiting sort:")
+        return
+    while(1):
+        Qarg = []
+        #get user input
+        argument_raw = input("Would you like to sort by priority or time? (type 'end' to exit)\n")
+        if argument_raw.lower()== "end":
+            break
+        elif argument_raw.lower()== "priority":
+            #retrive relevent argument from diary. Quantify in new list to sort
+            for diaryIndex in range(0,len(Diary)):
+                if Diary[diaryIndex][PRIORITY_START:PRIORITY_END] == "HIGH  ":
+                    Qarg.append(1)
+                elif Diary[diaryIndex][PRIORITY_START:PRIORITY_END] == "MEDIUM":
+                    Qarg.append(2)
+                else:
+                    Qarg.append(3)
+        elif argument_raw.lower()== "time":
+            for diaryIndex in range(0,len(Diary)):
+                date = Diary[diaryIndex][DATE_START:DATE_END]
+                time = Diary[diaryIndex][STARTTIME_START:STARTTIME_END]
+                Qarg.append(int(date[YEAR_START:YEAR_END]+date[MONTH_START:MONTH_END] + date[DAY_START:DAY_END]+time))
+        else:
+            print("\n I\'m sorry that response is not recognised please try again")
+            
+        if len(Qarg) > 0:#perform the sort
+            swaps=1
+            while(swaps !=0 ):
+                swaps = 0
+                for index in range(1,len(Qarg)):
+                    if Qarg[index]<Qarg[index-1]:
+                        swaps = swaps+1
+                        Diary.insert(index-1, Diary.pop(index))
+                        Qarg.insert(index-1, Qarg.pop(index))
+            print("Sort complete")
+    print("Exiting sort:")
     
 
 menu=True
@@ -332,7 +395,7 @@ while menu:
     if Menu_Response_rawInput == '1':
         ADD_RECORD()
     elif Menu_Response_rawInput == '2':
-        print('\n Sorting Your Records')
+        SORT_RECORD()
     elif Menu_Response_rawInput == '3':
         break
     else:

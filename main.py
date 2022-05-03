@@ -216,6 +216,7 @@ def GET_END_TIME():
             for x in End_Time_rawInput:
                 if not(ord(x) in range(48,58)):
                     Valid = False
+                    break
         else:
             Valid = False
         if Valid == True:
@@ -246,11 +247,11 @@ def GET_DESCRIPTOR():
         #retreive date
         DESCRIPTOR_rawInput = input("Please enter a name for the event (30 charicters maximum)\n")
         #varify input format
-        if len(DESCRIPTOR_rawInput)<31:
+        if len(DESCRIPTOR_rawInput)<=30:
             while len(DESCRIPTOR_rawInput)<30:
                 DESCRIPTOR_rawInput=DESCRIPTOR_rawInput + ' '
             break
-        print("To many charicters. Please try again")
+        print("Too many charicters. Please try again")
     return DESCRIPTOR_rawInput
 
 ####################################################
@@ -337,8 +338,7 @@ def ADD_RECORD():
 def SORT_RECORD():  
     print("Sorting Diary:")
     if not(len(Diary) > 0):
-        print("Diary is empty")
-        print("Exiting sort:")
+        print("Diary is empty/nExiting sort:")
         return
     while(1):
         Qarg = []

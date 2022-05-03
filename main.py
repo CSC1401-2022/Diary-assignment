@@ -373,6 +373,7 @@ def SORT_RECORD():
                         Diary.insert(index-1, Diary.pop(index))
                         Qarg.insert(index-1, Qarg.pop(index))
             print("Sort complete")
+            PRINT_DIARY()
     print("Exiting sort:")
     
 

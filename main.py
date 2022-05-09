@@ -37,27 +37,34 @@ def GET_DATE():
 # History
 #	Rev1, 02/05/2022, Anthony Mann: checking for a valid date in the givin year
 ####################################################
-
-def VALIDATE_DATE():
-    day = newDate[0:2]
+#i would sugest using a daysInMonth function and then check the following conditions only
+    #10000>year> 2021
+    #1 <= month <= 12
+    #1 <= day <= daysInMonth(month, year)
+#note: all three conditions must be met for date to be valid
+#let me know if you need a hand with the daysInMonth function.
+def VALIDATE_DATE():#I would have the calling function pass the date string to this function. just makes the function more generic for use in other programs. somthing like VALIDATE_DATE(date)
+    day = newDate[0:2]# this would then be: day=date[0:2]    
     month = newDate[3:5]
     year = newDate[6:10]
+    # this could be condenced using in (e.g. month in [1,3,5,7,8,10,12])
+    # assignment task sheet seems to sugest using a daysInMonth function that return the days in a given month and year(might be helpful)
     # Is a 31 day month
     if int(day) <= 31 and int(month) == 1 or  int(month) == 3 or  int(month) == 5 or  int(month) == 7 or  int(month) == 8 or  int(month) == 10 or  int(month) == 12: 
-        return  True
+        return  True#there is no year validation befor return
 
     # Is a 30 day month
     elif int(day) <= 30 and int(month) == 4 or  int(month) == 6 or  int(month) == 9 or  int(month) == 11:
         return  True
 
     # Is Febuary and a Leap Year
-    elif int(day) <= 29 and int(year) % 4 == 0 and int(month) == 2:
+    elif int(day) <= 29 and int(year) % 4 == 0 and int(month) == 2: #leap year check is missing conditions
         return  True
 
 # Is Febuary and NOT a Leap Year
     elif int(day) <= 28 and int(year)  and int(month) == 2:
         return  True
-
+#bit late to be checking month and day ranges. 
 # Check the month is in the correct range
     if int(month) >12 or int(month) <1:
         print("Invalid Month, Please Try again")
@@ -157,11 +164,13 @@ def GET_PRIORITY():
 # 	Rev1, 07/05/2022, Anthony Mann: Creates the record for the diary entry
 ####################################################
 
-def ADD_RECORD():
-    validDate = VALIDATE_DATE()
+def ADD_RECORD():# ADD_RECORD shouldn't return anything. the result of ADD_RECORD is that a record is appended to the list. 
+    validDate = VALIDATE_DATE()#get the date then validate. only continue if date is valid otherwise get date again.
     priority = GET_PRIORITY()
     startTime = GET_START_TIME()
-    endTime = GET_END_TIME()
+    endTime = GET_END_TIME()#make sure you call the validate time function befor proceding.
+                            #I would also get the date and time together and check for concurency befor proceding too. 
+                            #That way you can chuck a loop around both and have the user retry if there is any overlaps
     desc = GET_DESCRIPTOR()
     if  validDate == True:
         priority
@@ -204,9 +213,9 @@ while 1:
         Menu_Response_rawInput=input("Dear Diary, I would like to: \n")
         if Menu_Response_rawInput == "1":
             print("\n Adding A Record")
-            newDate = GET_DATE()
-            newRecord = ADD_RECORD()
-            Diary.append(newRecord)
+            newDate = GET_DATE()#<--
+            newRecord = ADD_RECORD()# try and add these two into the ADD_RECORD function so that everything relating to adding a record is in the one place
+            Diary.append(newRecord)#<--
         elif Menu_Response_rawInput == "2":
             print("\n Sorting Your Records")
         elif Menu_Response_rawInput == "3":

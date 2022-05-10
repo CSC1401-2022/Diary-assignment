@@ -1,4 +1,5 @@
 # Assignment 3 Dairy Application
+
 Diary=[]
 
 
@@ -38,38 +39,52 @@ def GET_DATE():
 #	Rev1, 02/05/2022, Anthony Mann: checking for a valid date in the givin year
 ####################################################
 
-def VALIDATE_DATE():
-    day = newDate[0:2]
-    month = newDate[3:5]
-    year = newDate[6:10]
-    # Is a 31 day month
-    if int(day) <= 31 and int(month) == 1 or  int(month) == 3 or  int(month) == 5 or  int(month) == 7 or  int(month) == 8 or  int(month) == 10 or  int(month) == 12: 
-        return  True
+def DAYS_IN_MONTH(month, year):
+    thirtyOneDay = [1,3,5,7,8,10,12]
+    thirtyDay = [4,6,9,11]
+    if month in thirtyOneDay:
+       Days = 31
+       return Days
+    if month in thirtyDay:
+       Days = 30
+       return Days
+    if month == 2:
+        if year % 4 == 0:
+            if year % 100 == 0:
+                if year % 400 == 0:
+                    return 29
+                else:
+                    return 28
+            else:
+                 return 29 
+        else:
+            return 28
 
-    # Is a 30 day month
-    elif int(day) <= 30 and int(month) == 4 or  int(month) == 6 or  int(month) == 9 or  int(month) == 11:
-        return  True
 
-    # Is Febuary and a Leap Year
-    elif int(day) <= 29 and int(year) % 4 == 0 and int(month) == 2:
-        return  True
+# print(DAYS_IN_MONTH(int('02'), 1900))
 
-# Is Febuary and NOT a Leap Year
-    elif int(day) <= 28 and int(year)  and int(month) == 2:
-        return  True
-
-# Check the month is in the correct range
-    if int(month) >12 or int(month) <1:
-        print("Invalid Month, Please Try again")
-        isValidDate = False
-# Check the Day is in the correct range
-    elif int(day) >31 or int(day) <1:
-        print("Invalid Day, Please Try again")
-        isValidDate = False
+def VALIDATE_DATE(date):
+    year = int(date[6:10])
+    month = int(date[3:5])
+    day = int(date[:2])
+    if year > 2021 and year < 10000:
+        if month > 0 and month < 13:
+            if day <= DAYS_IN_MONTH(month, year):
+                print('Date is valid')
+                return True
+            else:
+                print('Please Check that the Day is within Range')
+                return False
+        else:
+            print('Check that the Month is a within Range')
+            return False
     else:
-        "Please Check your Date and Try again"
-        isValidDate = False
-    return isValidDate 
+        print('Check that the Year is a within Range')
+        return False
+    
+
+# print(VALIDATE_DATE('29/02/1922'))
+    
 
 def GET_START_TIME():
     while(1):
@@ -146,6 +161,8 @@ def GET_PRIORITY():
 # ##########
 #   Retrives event infomation from user using the GET_ functions. 
 #   Validiates the retreaved event infomation using the VALIDATE_ functions
+#   Validiates the retreaved event infomation using the VALIDATE_ functions
+#   Validiates the retreaved event infomation using the VALIDATE_ functions
 #   Creates a string describing the new event in the following format 
 #       "Priority[6];Date[10];start time[2];end time[2];discription[30]"
 #       (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
@@ -157,19 +174,62 @@ def GET_PRIORITY():
 # 	Rev1, 07/05/2022, Anthony Mann: Creates the record for the diary entry
 ####################################################
 
+
 def ADD_RECORD():
-    validDate = VALIDATE_DATE()
+    while 1:
+        date = GET_DATE()
+        if VALIDATE_DATE(date) == True:
+            break
+        else:
+            print("Err: Invalid Date")
+        break
+    descriptor = GET_DESCRIPTOR()
     priority = GET_PRIORITY()
     startTime = GET_START_TIME()
     endTime = GET_END_TIME()
-    desc = GET_DESCRIPTOR()
-    if  validDate == True:
-        priority
-        startTime
-        endTime
-        desc
-        newRecord = f"{priority.rstrip()};"+ f"{newDate};" + f"{startTime};" + f"{endTime};" + f"{desc};"
-        return newRecord
+    entry = [priority.rstrip() + ';' ,date + ';', str(startTime) + ';', str(endTime) + ';' , descriptor.rstrip() + ';']
+    Diary.append(entry)
+    PRINT_DIARY()
+
+####################################################
+# PRINT_DIARY()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	None
+# ##########
+#   Prints the Diary Entries in a table format. 
+#   
+#   
+# Author: Anthony Mann
+# Date: 07/05/2022
+# History
+# 	Rev1, 07/05/2022, Anthony Mann: Creates the record for the diary entry
+####################################################
+
+# Diary.append({"date": "23/05/1987", "StartTime": int(10), "EndTime": int(12), "Description": 'My B\'day','priority': 'High'})
+# print(Diary[0]["date"])
+
+def PRINT_DIARY():
+    spaceBetween = "   "
+    pHeader = "Priority"
+    dHeader = "Date      "
+    tSHeader = "Start"
+    tEHeader = "End"
+    dSHeader = "Description                     "
+    header = pHeader + spaceBetween + dHeader + spaceBetween + tSHeader + spaceBetween + tEHeader + spaceBetween + dSHeader
+    bar = '-' * len(pHeader) + spaceBetween + '-' * len(dHeader) + spaceBetween + '-' * len(tSHeader) + spaceBetween + '-' * len(tEHeader) + spaceBetween + '-' * len(dSHeader)
+    print('\n' + header + '\n' + bar)
+
+    if len(Diary) > 0:
+        for entry in Diary:
+            print(len(entry[1]))
+            print( len(entry[0]))
+            print(entry[0], entry[1],)
+            # print('Date: ' +  entry[DATE_START:DATE_END], 'Start Time: ' + entry[STARTTIME_START:STARTTIME_END], 'End Time: ' + entry[ENDTIME_START:ENDTIME_END], entry[DISCRIPTION_START:DISCRIPTION_END], entry[PRIORITY_START:PRIORITY_END] )
+    else:
+        print('\n Select Add new record to create a new appointment') 
 
 
 ####################################################
@@ -184,16 +244,13 @@ def ADD_RECORD():
 # History
 # 	Rev1, 02/05/2022, Anthony Mann: Creates the record for the diary entry
 ####################################################
+
+
+
 while 1:
     menu=True
     while menu:
-        
-        if len(Diary) > 0:
-            for entry in Diary:
-                addedEntry = str(entry).split(";")
-                print("Appointment Info: \n" + "Priority: " + addedEntry[0]+";" + " Date: " +  addedEntry[1]+";" + " Start Time: " + addedEntry[2]+";" + " End Time: " + addedEntry[3]+";" + " Desc: " + addedEntry[4] )
-
-        print("\n Select Add new record to create a new appointment")        
+           
         print("""
         1. Add Record
         2. Sort Records
@@ -204,9 +261,7 @@ while 1:
         Menu_Response_rawInput=input("Dear Diary, I would like to: \n")
         if Menu_Response_rawInput == "1":
             print("\n Adding A Record")
-            newDate = GET_DATE()
-            newRecord = ADD_RECORD()
-            Diary.append(newRecord)
+            ADD_RECORD()
         elif Menu_Response_rawInput == "2":
             print("\n Sorting Your Records")
         elif Menu_Response_rawInput == "3":

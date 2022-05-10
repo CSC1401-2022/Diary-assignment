@@ -61,8 +61,6 @@ def DAYS_IN_MONTH(month, year):
             return 28
 
 
-# print(DAYS_IN_MONTH(int('02'), 1900))
-
 def VALIDATE_DATE(date):
     year = int(date[6:10])
     month = int(date[3:5])
@@ -160,8 +158,6 @@ def GET_PRIORITY():
 # 	None
 # ##########
 #   Retrives event infomation from user using the GET_ functions. 
-#   Validiates the retreaved event infomation using the VALIDATE_ functions
-#   Validiates the retreaved event infomation using the VALIDATE_ functions
 #   Validiates the retreaved event infomation using the VALIDATE_ functions
 #   Creates a string describing the new event in the following format 
 #       "Priority[6];Date[10];start time[2];end time[2];discription[30]"

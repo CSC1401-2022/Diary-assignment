@@ -462,18 +462,31 @@ def SORT_RECORD():
 
 def ADD_RECORD():
     while 1:
-        date = GET_DATE()
-        if VALIDATE_DATE(date) == True:
+        while 1:
+            date = GET_DATE()
+            if VALIDATE_DATE(date) == True:
+                break
+            
+
+        while 1:
+            startTime = GET_START_TIME()
+            endTime = GET_END_TIME()
+            if VALIDATE_TIME(startTime,endTime,date) == True: 
+                break
+        if IS_CONCURRENT_APPOINTMENT(startTime,endTime,date) == False:
             break
-        else:
-            print("Err: Invalid Date")
-        break
+
     descriptor = GET_DESCRIPTOR()
     priority = GET_PRIORITY()
-    startTime = GET_START_TIME()
-    endTime = GET_END_TIME()
-    entry = [priority.rstrip() + ';' ,date + ';', str(startTime) + ';', str(endTime) + ';' , descriptor.rstrip() + ';']
-    Diary.append(entry)
+    strStartTime = str(startTime)
+    if len(strStartTime) < 2:
+        strStartTime = '0' + strStartTime
+
+    strEndTime = str(endTime)
+    if len(strEndTime) < 2:
+        strEndTime = '0' + strEndTime
+
+    Diary.append(priority+';' + date+';' + strStartTime+';' + strEndTime+';' + descriptor)
     PRINT_DIARY()
 
 ####################################################
@@ -509,8 +522,7 @@ def PRINT_DIARY():
 
     if len(Diary) > 0:
         for entry in Diary:
-            print('\n')
-            print('Appointment Info: \n' + 'Date: ' +  entry[DATE_START:DATE_END], 'Start Time: ' + entry[STARTTIME_START:STARTTIME_END], 'End Time: ' + entry[ENDTIME_START:ENDTIME_END], entry[DISCRIPTION_START:DISCRIPTION_END], entry[PRIORITY_START:PRIORITY_END] )
+            print(entry[PRIORITY_START:PRIORITY_END]+"    "+ entry[DATE_START:DATE_END] +"   " + entry[STARTTIME_START:STARTTIME_END], "     " + entry[ENDTIME_START:ENDTIME_END] + "     " +entry[DISCRIPTION_START:DISCRIPTION_END])
     else:
         print('\n Select Add new record to create a new appointment')        
 
@@ -546,6 +558,7 @@ while 1:
             ADD_RECORD()
         elif Menu_Response_rawInput == "2":
             print("\n Sorting Your Records")
+            SORT_RECORD()
         elif Menu_Response_rawInput == "3":
             print("\n Thanks for using Dear Diary, see you next time \n")
             break

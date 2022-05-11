@@ -7,10 +7,7 @@ import time
 #                 10        20        30        40        50
 #       012345678901234567890123456789012345678901234567890123
 #      "HIGH;10/06/2022;07;22;Example Entry                 "
-Diary=["HIGH;10/06/2022;07;22;Testing entry one             ",
-       "LOW ;01/09/2022;12;22;Testing entry two             ",
-       "HIGH;20/07/2023;10;15;Testing entry three           ",
-       "HIGH;20/07/2021;10;15;Past                          "]
+Diary=[]
 
 ##constants##
 PRIORITY_START = 0
@@ -31,99 +28,8 @@ YEAR_START = 6
 YEAR_END = 10
 ####################
 
-####################################################
-# IS_CONCURRENT_APPOINTMENT(start,end,date)
-# ##########	
-# inputs:
-#   start, int:
-#       The hour of the start time (validated)
-#   end, int:
-#       The hour of the end time (validated)
-#   date, str[10],("dd/mm/yyyy"):
-#       The date input from the user (validated)
-# outputs:
-# 	(unnamed), bool:
-#       Wether of not the apointment is concurrent as a True/False boolean
-#           If there is an apointment overlap returns True. No overlap = False
-# ##########
-#   Searches through Diary[] and checks for overlappong apointments between the
-#   new entry and current entries. Requirse a global array of strings named Diary 
-#   formated "Priority[6];Date[10];start time[2];end time[2];discription[30]"
-#               (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
-# ##########
-# Author: Timothy van den Bosch
-# Date: 03/05/2022
-# History
-# 	Rev 1.0: 03/05/2022, Timothy van den Bosch
-#        Completed function
-####################################################
+##Get_functions##
 
-def IS_CONCURRENT_APPOINTMENT(start, end, date):
-    #first check for same day entries. If the new event dosn't share a day there is no overlap
-    NDay = int(date[DAY_START:DAY_END])
-    NMonth = int(date[MONTH_START:MONTH_END])
-    NYear = int(date[YEAR_START:YEAR_END])
-    for entry in Diary: 
-        EDate = entry[DATE_START:DATE_END]
-        EDay = int(EDate[DAY_START:DAY_END])
-        EMonth = int(EDate[MONTH_START:MONTH_END])
-        EYear = int(EDate[YEAR_START:YEAR_END])
-        if EYear == NYear and EMonth == NMonth and EDay == NDay:#is the same day
-            #check for time overlap
-            EStart = int(entry[STARTTIME_START:STARTTIME_END])
-            EEnd = int(entry[ENDTIME_START:ENDTIME_END])
-            if (EStart<=start<EEnd) or (start<=EStart<end):
-                print("Warning!\n\tThe new entry overlaps with the current entry: "+entry[DISCRIPTION_START:DISCRIPTION_END]+"\n\tFrom "+entry[STARTTIME_START:STARTTIME_END]+" to "+entry[ENDTIME_START:ENDTIME_END]+" on "+entry[DATE_START:DATE_END])
-                return True
-    return False #no overlaps
-
-####################################################
-# VALIDATE_TIME(start,end,date)
-# ##########	
-# inputs:
-#   start, int:
-#       The hour of the start time (not validated)
-#   end, int:
-#       The hour of the end time (not validated)
-#   date, str[10],("dd/mm/yyyy"):
-#       The date input from the user (validated)
-# outputs:
-# 	(unnamed), bool:
-#       The validity of the inputed time as a True/False boolean.
-# ##########
-#   Checks the start and end time for validity (start>=7 end<=22 and start<end).
-#   Considering date and time, checks the time is in the futer. (Requirse librarie time).
-#   If both checks pass outputs True. If ether fail an error is displayed and False is passed
-# ##########
-# Author: Timothy van den Bosch
-# Date: 02/05/2022
-# History
-# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
-#        Completed function
-####################################################
-
-def VALIDATE_TIME(start, end, date):
-    if not (start>=7 and end <=22 and start<end):
-        print("Time not valid: Start and/or end times do not meet conditions")
-        return False
-    DDay = int(date[DAY_START:DAY_END])-time.localtime().tm_mday
-    DMonth = int(date[MONTH_START:MONTH_END])-time.localtime().tm_mon
-    DYear = int(date[YEAR_START:YEAR_END])-time.localtime().tm_year
-    DStart = start-time.localtime().tm_hour
-    if DYear > 0:
-        return True
-    if DYear==0: 
-        if DMonth>0:
-            return True
-        if DMonth==0:
-            if DDay>0:
-                return True
-            if DDay==0:
-                if DStart > 0:
-                    return True
-    print("Time not valid: Given time is in the past.")            
-    return False 
-    
 ####################################################
 # GET_DATE()
 # ##########	
@@ -163,86 +69,6 @@ def GET_DATE():
         print("Invalid input format. Please try again")
     return Date_rawInput
 
-
-
-####################################################
-# DAYS_IN_MONTH(month, year)
-##########	
-# inputs:
-# 	month, int:
-#       The month on which to check
-#   year, int
-#       The year of the month in question (is only considerd for Febuary)
-# outputs:
-# 	Days, int:
-#       The number of days in the given month (considering the year)
-##########
-#   Checks the month and returns the number of days in the given month
-#   if the month given is Febuary considers the year input to determain if its a leep year
-#       number of days reurned is adjusted acordingly.
-##########
-# Author: Anthony Mann
-# 02/05/2022
-# History
-#	Rev1, 02/05/2022, Anthony Mann: 
-#       Function complete
-####################################################
-def DAYS_IN_MONTH(month, year):
-    thirtyOneDay = [1,3,5,7,8,10,12]
-    thirtyDay = [4,6,9,11]
-    if month in thirtyOneDay:
-       Days = 31
-       return Days
-    if month in thirtyDay:
-       Days = 30
-       return Days
-    if month == 2:
-        if year % 4 == 0:
-            if year % 100 == 0:
-                if year % 400 == 0:
-                    return 29
-                else:
-                    return 28
-            else:
-                 return 29 
-        else:
-            return 28
-        
-####################################################
-# VALIDATE_DATE()
-##########	
-# inputs:
-# 	date, string
-#       the date in question formated as the following "dd/mm/yyyy"
-# outputs:
-# 	valid, bool
-#       the validity of the given date
-##########
-# Checking for leap year and each month has correct number of days.  
-##########
-# Author: Anthony Mann
-# 02/05/2022
-# History
-#	Rev1, 02/05/2022, Anthony Mann: checking for a valid date in the givin year
-####################################################
-def VALIDATE_DATE(date):
-    year = int(date[YEAR_START:YEAR_END])
-    month = int(date[MONTH_START:MONTH_END])
-    day = int(date[DAY_START:DAY_END])
-    if year > 2021 and year < 10000:
-        if month > 0 and month < 13:
-            if day <= DAYS_IN_MONTH(month, year):
-                return True
-            else:
-                print('Warning!\n\tGiven date is invalid \n\tPlease check that the day is within the an exceptable range')
-                return False
-        else:
-            print('Warning!\n\tGiven date is invalid \n\tPlease check that the month is within the an exceptable range')
-            return False
-    else:
-        print('Warning!\n\tGiven date is invalid \n\tPlease check that the year is within the an exceptable range')
-        return False
-    
 ####################################################
 # GET_START_TIME()
 # ##########	
@@ -336,12 +162,15 @@ def GET_DESCRIPTOR():
         #retreive date
         DESCRIPTOR_rawInput = input("Please enter a name for the event (30 charicters maximum)\n")
         #varify input format
-        if len(DESCRIPTOR_rawInput)<=30:
+        if len(DESCRIPTOR_rawInput)==0:
+            print("Name length must be none zero. Please try again")
+        elif len(DESCRIPTOR_rawInput)<=30:
             while len(DESCRIPTOR_rawInput)<30:
                 DESCRIPTOR_rawInput=DESCRIPTOR_rawInput+' '
                 break
             break
-        print("Too many charicters. Please try again")
+        else:
+            print("Too many charicters. Please try again")
     return DESCRIPTOR_rawInput
 
 ####################################################
@@ -378,8 +207,181 @@ def GET_PRIORITY():
             break
         print("Invalid input. Please try again")
     return PRIORITY
-                       
 
+##validation##
+
+####################################################
+# IS_CONCURRENT_APPOINTMENT(start,end,date)
+# ##########	
+# inputs:
+#   start, int:
+#       The hour of the start time (validated)
+#   end, int:
+#       The hour of the end time (validated)
+#   date, str[10],("dd/mm/yyyy"):
+#       The date input from the user (validated)
+# outputs:
+# 	(unnamed), bool:
+#       Wether of not the apointment is concurrent as a True/False boolean
+#           If there is an apointment overlap returns True. No overlap = False
+# ##########
+#   Searches through Diary[] and checks for overlappong apointments between the
+#   new entry and current entries. Requirse a global array of strings named Diary 
+#   formated "Priority[6];Date[10];start time[2];end time[2];discription[30]"
+#               (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
+# ##########
+# Author: Timothy van den Bosch
+# Date: 03/05/2022
+# History
+# 	Rev 1.0: 03/05/2022, Timothy van den Bosch
+#        Completed function
+####################################################
+
+def IS_CONCURRENT_APPOINTMENT(start, end, date):
+    #first check for same day entries. If the new event dosn't share a day there is no overlap
+    NDay = int(date[DAY_START:DAY_END])
+    NMonth = int(date[MONTH_START:MONTH_END])
+    NYear = int(date[YEAR_START:YEAR_END])
+    for entry in Diary: 
+        EDate = entry[DATE_START:DATE_END]
+        EDay = int(EDate[DAY_START:DAY_END])
+        EMonth = int(EDate[MONTH_START:MONTH_END])
+        EYear = int(EDate[YEAR_START:YEAR_END])
+        if EYear == NYear and EMonth == NMonth and EDay == NDay:#is the same day
+            #check for time overlap
+            EStart = int(entry[STARTTIME_START:STARTTIME_END])
+            EEnd = int(entry[ENDTIME_START:ENDTIME_END])
+            if (EStart<=start<EEnd) or (start<=EStart<end):
+                print("Warning!\n\tThe new entry overlaps with the current entry: "+entry[DISCRIPTION_START:DISCRIPTION_END]+"\n\tFrom "+entry[STARTTIME_START:STARTTIME_END]+" to "+entry[ENDTIME_START:ENDTIME_END]+" on "+entry[DATE_START:DATE_END])
+                return True
+    return False #no overlaps
+
+####################################################
+# VALIDATE_TIME(start,end,date)
+# ##########	
+# inputs:
+#   start, int:
+#       The hour of the start time (not validated)
+#   end, int:
+#       The hour of the end time (not validated)
+#   date, str[10],("dd/mm/yyyy"):
+#       The date input from the user (validated)
+# outputs:
+# 	(unnamed), bool:
+#       The validity of the inputed time as a True/False boolean.
+# ##########
+#   Checks the start and end time for validity (start>=7 end<=22 and start<end).
+#   Considering date and time, checks the time is in the futer. (Requirse librarie time).
+#   If both checks pass outputs True. If ether fail an error is displayed and False is passed
+# ##########
+# Author: Timothy van den Bosch
+# Date: 02/05/2022
+# History
+# 	Rev 1.0: 02/05/2022, Timothy van den Bosch
+#        Completed function
+####################################################
+def VALIDATE_TIME(start, end, date):
+    if not (start>=7 and end <=22 and start<end):
+        print("Time not valid: Start and/or end times do not meet conditions")
+        return False
+    DDay = int(date[DAY_START:DAY_END])-time.localtime().tm_mday
+    DMonth = int(date[MONTH_START:MONTH_END])-time.localtime().tm_mon
+    DYear = int(date[YEAR_START:YEAR_END])-time.localtime().tm_year
+    DStart = start-time.localtime().tm_hour
+    if DYear > 0:
+        return True
+    if DYear==0: 
+        if DMonth>0:
+            return True
+        if DMonth==0:
+            if DDay>0:
+                return True
+            if DDay==0:
+                if DStart > 0:
+                    return True
+    print("Time not valid: Given time is in the past.")            
+    return False 
+
+####################################################
+# VALIDATE_DATE()
+##########	
+# inputs:
+# 	date, string
+#       the date in question formated as the following "dd/mm/yyyy"
+# outputs:
+# 	valid, bool
+#       the validity of the given date
+##########
+# Checking for leap year and each month has correct number of days.  
+##########
+# Author: Anthony Mann
+# 02/05/2022
+# History
+#	Rev1, 02/05/2022, Anthony Mann: checking for a valid date in the givin year
+####################################################
+def VALIDATE_DATE(date):
+    year = int(date[YEAR_START:YEAR_END])
+    month = int(date[MONTH_START:MONTH_END])
+    day = int(date[DAY_START:DAY_END])
+    if year > 2021 and year < 10000:
+        if month > 0 and month < 13:
+            if day <= DAYS_IN_MONTH(month, year):
+                return True
+            else:
+                print('Warning!\n\tGiven date is invalid \n\tPlease check that the day is within the an exceptable range')
+                return False
+        else:
+            print('Warning!\n\tGiven date is invalid \n\tPlease check that the month is within the an exceptable range')
+            return False
+    else:
+        print('Warning!\n\tGiven date is invalid \n\tPlease check that the year is within the an exceptable range')
+        return False
+    
+####################################################
+# DAYS_IN_MONTH(month, year)
+##########	
+# inputs:
+# 	month, int:
+#       The month on which to check
+#   year, int
+#       The year of the month in question (is only considerd for Febuary)
+# outputs:
+# 	Days, int:
+#       The number of days in the given month (considering the year)
+##########
+#   Checks the month and returns the number of days in the given month
+#   if the month given is Febuary considers the year input to determain if its a leep year
+#       number of days reurned is adjusted acordingly.
+##########
+# Author: Anthony Mann
+# 02/05/2022
+# History
+#	Rev1, 02/05/2022, Anthony Mann: 
+#       Function complete
+####################################################
+def DAYS_IN_MONTH(month, year):
+    thirtyOneDay = [1,3,5,7,8,10,12]
+    thirtyDay = [4,6,9,11]
+    if month in thirtyOneDay:
+       Days = 31
+       return Days
+    if month in thirtyDay:
+       Days = 30
+       return Days
+    if month == 2:
+        if year % 4 == 0:
+            if year % 100 == 0:
+                if year % 400 == 0:
+                    return 29
+                else:
+                    return 28
+            else:
+                 return 29 
+        else:
+            return 28
+        
+##main operational functions##
+ 
 ####################################################
 # SORT_RECORD()
 # ##########	
@@ -442,12 +444,13 @@ def SORT_RECORD():
             PRINT_DIARY()
     print("Exiting sort:")
     
-
 ####################################################
 # ADD_RECORD()
 # ##########	
 # inputs:
-#   None
+#   loop, bool
+#       The loop condition. False - runs once
+#                           True - runs indefinitely
 # outputs:
 # 	None
 # ##########
@@ -455,7 +458,7 @@ def SORT_RECORD():
 #   Validiates the retreaved event infomation using the VALIDATE_ functions
 #   Creates a string describing the new event in the following format 
 #       "Priority[4];Date[10];start time[2];end time[2];discription[30]"
-#       (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
+#       (e.g "HIGH;23/09/2022;09;10;CSC1401 class                 ")
 #   Appends the string to array Diary[]
 # ##########
 # Author: Anthony Mann
@@ -467,8 +470,8 @@ def SORT_RECORD():
 #           nested get date and time to allow for re-entry 
 #               of date when time given is in the past
 #           Added an exit condition to the date retrieval for leaveing the ADD_RECORD state
+#           Added a condition to the main loop- can be made to run once by passing False (used in editing records)
 ####################################################
-
 def ADD_RECORD(loop):
     LOOP=True;
     while LOOP:
@@ -477,7 +480,7 @@ def ADD_RECORD(loop):
                 while 1:
                     date = GET_DATE()
                     if date == False:
-                        return False
+                        return False #used to catch early exit (used in editing records)
                     if VALIDATE_DATE(date) == True:
                         break
             
@@ -529,6 +532,7 @@ def PRINT_DIARY():
             print(strIndex+"    "+Diary[index][PRIORITY_START:PRIORITY_END]+"       "+ Diary[index][DATE_START:DATE_END] +"   " + Diary[index][STARTTIME_START:STARTTIME_END], "     " + Diary[index][ENDTIME_START:ENDTIME_END] + "    " +Diary[index][DISCRIPTION_START:DISCRIPTION_END])
     else:
         print('\n No entries in Diary\n Please select Add Record to create a new appointment')        
+
 ####################################################
 # EDIT_RECORD()
 # ##########	
@@ -549,13 +553,14 @@ def PRINT_DIARY():
 #################################################### 
 def EDIT_RECORD():
     while 1:
+        #get inputs
         valid = False
         while valid == False:
             valid = True
             raw_input=input("Please enter the Index of the entry to edit ('end' to exit to menu)\n")
             if raw_input.lower()=="end":
                 print("Exiting to menu")
-                return
+                return #exit function
             for x in raw_input:
                 if not(ord(x) in range(48,58)):
                     valid = False
@@ -565,27 +570,31 @@ def EDIT_RECORD():
             if index >= len(Diary):
                 valid = False
                 print("Invalid input. Index excieds Diary size")
-        #input valid
-        old_entry = Diary.pop(index)
         
+        #input valid
+        old_entry = Diary.pop(index)#pull out the entry to edit
+        print("What would you like to edit?")
         print("""
         1. Priority
         2. Time
         3. Discription
         4. All
         """)
-        raw_input=input("What would you like to edit?\n")
-        if raw_input == "1":
-            print("\n Editing Priority")
+        raw_input=input("\n")
+        if raw_input == '1':
+            print("Editing Priority")
+            #get the new value
             priority = GET_PRIORITY()
+            #update the poped entry with new data
             old_entry = priority +';'+ old_entry[DATE_START:]
+            #re-insert into diary
             Diary.insert(index, old_entry)
             PRINT_DIARY()
         elif raw_input == "2":
-            print("\n Editing Time")
-            while 1:
-                while 1:
-                    while 1:
+            print("Editing Time")
+            while 1:#check concurrentsy
+                while 1:#get time and validate
+                    while 1:#get new date and validate
                         date = GET_DATE()
                         if date == False:
                             return False
@@ -598,30 +607,36 @@ def EDIT_RECORD():
                         break
                 if IS_CONCURRENT_APPOINTMENT(startTime,endTime,date) == False:
                     break
+            #broke out of loops - inputs are valid
             strStartTime = str(startTime)
             if len(strStartTime) < 2:
                 strStartTime = '0' + strStartTime
-        
             strEndTime = str(endTime)
             if len(strEndTime) < 2:
                 strEndTime = '0' + strEndTime
+            #update the poped entry with new data
             old_entry = old_entry[:DATE_START]+date+';'+strStartTime+';'+strEndTime+';'+old_entry[DISCRIPTION_START:]
+            #re-insert into diary
             Diary.insert(index, old_entry)
             PRINT_DIARY()
-        elif Menu_Response_rawInput == "3":
+        elif raw_input == "3":
+            #get the new value
             print("\n Editing Discription")
             discription = GET_DESCRIPTOR()
+            #update the poped entry with new data
             old_entry = old_entry[:DISCRIPTION_START]+discription
+            #re-insert into diary
             Diary.insert(index, old_entry)
             PRINT_DIARY()
         elif raw_input == "4":
+            #everything is being replaced - delete entry and add a new one
             print("\n Editing All")
-            if ADD_RECORD(False) == False:
+            if ADD_RECORD(False) == False:#if addition is aborted early re-insert old data
                 print("Edit aborted!")
                 Diary.insert(index, old_entry)
         else:
             print("\n I\'m sorry that response is not recognised please try again")
-        
+
 ####################################################
 # REMOVE_RECORDS()
 # ##########	
@@ -663,7 +678,7 @@ def REMOVE_RECORDS():
                         print("Invalid input. Index excieds Diary size")
         #input valid
         if raw_input.lower()=="clean":
-            for index in range(0, len(Diary)):
+            for index in range(0, len(Diary)-1):
                 date = Diary[index][DATE_START:DATE_END]
                 start = int(Diary[index][STARTTIME_START:STARTTIME_END])
                 DDay = int(date[DAY_START:DAY_END])-time.localtime().tm_mday
@@ -713,7 +728,6 @@ def REMOVE_RECORDS():
 # 	Rev1, 02/05/2022, Anthony Mann: 
 #       Function complete
 ####################################################
-
 while 1:
     PRINT_DIARY()
     print("""

@@ -1,13 +1,16 @@
 # Assignment 3 Dairy Application
 ##import calls##
 import time
+   
 ################
 ##Global Variables##
 #                 10        20        30        40        50
 #       012345678901234567890123456789012345678901234567890123
+#      "HIGH;10/06/2022;07;22;Example Entry                 "
 Diary=["HIGH;10/06/2022;07;22;Testing entry one             ",
        "LOW ;01/09/2022;12;22;Testing entry two             ",
-       "HIGH;20/07/2023;10;15;Testing entry three           "]
+       "HIGH;20/07/2023;10;15;Testing entry three           ",
+       "HIGH;20/07/2021;10;15;Past                          "]
 
 ##constants##
 PRIORITY_START = 0
@@ -70,9 +73,8 @@ def IS_CONCURRENT_APPOINTMENT(start, end, date):
             EStart = int(entry[STARTTIME_START:STARTTIME_END])
             EEnd = int(entry[ENDTIME_START:ENDTIME_END])
             if (EStart<=start<EEnd) or (start<=EStart<end):
-                print("Warning!\n\tThe new entry overlaps with the current entry: "+entry[24:44]+":\n\t"+entry[18:20]+" to "+entry[21:23]+" on "+entry[7:17])
+                print("Warning!\n\tThe new entry overlaps with the current entry: "+entry[DISCRIPTION_START:DISCRIPTION_END]+"\n\tFrom "+entry[STARTTIME_START:STARTTIME_END]+" to "+entry[ENDTIME_START:ENDTIME_END]+" on "+entry[DATE_START:DATE_END])
                 return True
-    print("No overlaps detected!")
     return False #no overlaps
 
 ####################################################
@@ -143,7 +145,7 @@ def GET_DATE():
     while(1):
         Valid = True
         #retreive date
-        Date_rawInput = input("Please enter the date of the event (dd/mm/yyyy) (type 'end' to exit to menu)\n")
+        Date_rawInput = input("Please enter the date of the event (dd/mm/yyyy) (type 'end' to exit)\n")
         #varify input format
         if Date_rawInput == "end":
             return False
@@ -163,22 +165,28 @@ def GET_DATE():
 
 
 
-
-# DAYS_IN_MONTH()
+####################################################
+# DAYS_IN_MONTH(month, year)
 ##########	
 # inputs:
-# 	Date_rawInput, string
+# 	month, int:
+#       The month on which to check
+#   year, int
+#       The year of the month in question (is only considerd for Febuary)
 # outputs:
-# 	name, type
+# 	Days, int:
+#       The number of days in the given month (considering the year)
 ##########
-# Checking for leap year and each month has correct number of days.  
+#   Checks the month and returns the number of days in the given month
+#   if the month given is Febuary considers the year input to determain if its a leep year
+#       number of days reurned is adjusted acordingly.
 ##########
 # Author: Anthony Mann
 # 02/05/2022
 # History
-#	Rev1, 02/05/2022, Anthony Mann: checking for a valid date in the givin year
+#	Rev1, 02/05/2022, Anthony Mann: 
+#       Function complete
 ####################################################
-
 def DAYS_IN_MONTH(month, year):
     thirtyOneDay = [1,3,5,7,8,10,12]
     thirtyDay = [4,6,9,11]
@@ -199,13 +207,16 @@ def DAYS_IN_MONTH(month, year):
                  return 29 
         else:
             return 28
-
+        
+####################################################
 # VALIDATE_DATE()
 ##########	
 # inputs:
-# 	Date_rawInput, string
+# 	date, string
+#       the date in question formated as the following "dd/mm/yyyy"
 # outputs:
-# 	name, type
+# 	valid, bool
+#       the validity of the given date
 ##########
 # Checking for leap year and each month has correct number of days.  
 ##########
@@ -214,7 +225,6 @@ def DAYS_IN_MONTH(month, year):
 # History
 #	Rev1, 02/05/2022, Anthony Mann: checking for a valid date in the givin year
 ####################################################
-
 def VALIDATE_DATE(date):
     year = int(date[YEAR_START:YEAR_END])
     month = int(date[MONTH_START:MONTH_END])
@@ -222,20 +232,16 @@ def VALIDATE_DATE(date):
     if year > 2021 and year < 10000:
         if month > 0 and month < 13:
             if day <= DAYS_IN_MONTH(month, year):
-                print('Date is valid')
                 return True
             else:
-                print('Please Check that the Day is within Range')
+                print('Warning!\n\tGiven date is invalid \n\tPlease check that the day is within the an exceptable range')
                 return False
         else:
-            print('Check that the Month is a within Range')
+            print('Warning!\n\tGiven date is invalid \n\tPlease check that the month is within the an exceptable range')
             return False
     else:
-        print('Check that the Year is a within Range')
+        print('Warning!\n\tGiven date is invalid \n\tPlease check that the year is within the an exceptable range')
         return False
-    
-
-# print(VALIDATE_DATE('29/02/1922'))
     
 ####################################################
 # GET_START_TIME()
@@ -254,7 +260,6 @@ def VALIDATE_DATE(date):
 # 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
 ####################################################
-
 def GET_START_TIME():
     while(1):
         Valid = True
@@ -346,16 +351,19 @@ def GET_DESCRIPTOR():
 #   None
 # outputs:
 # 	PRIORITY, str:
-#       The Priority of an event given by the user as a string 6 charicters long
+#       The Priority of an event given by the user as a string 4 charicters long
 # ##########
-#   Takes the user input from a promt and validates format. The input is not case sensitive and excepts "high", "h","medium", "h","low" and "l".
-#    Returns "HIGH  ", "MEDIUM" or "LOW   " based on the user input 
+#   Takes the user input from a promt and validates format. 
+#   The input is not case sensitive and excepts "high", "h","low" and "l".
+#    Returns "HIGH" or "LOW " based on the user input 
 # ##########
 # Author: Timothy van den Bosch
 # Date: 02/05/2022
 # History
 # 	Rev 1.0: 02/05/2022, Timothy van den Bosch
 #        Completed function
+#   Rev 1.1: 11/05/2022, Timothy van den Bosch
+#       Removed the extra priority medium
 ####################################################
 def GET_PRIORITY():
     while(1):
@@ -363,16 +371,15 @@ def GET_PRIORITY():
         PRIORITY_rawInput = input("Please enter a priority for the event (High/Low)\n")
         #varify input format
         if PRIORITY_rawInput.lower() == "high" or PRIORITY_rawInput.lower() == 'h':
-            PRIORITY = "High"
+            PRIORITY = "HIGH"
             break
         if PRIORITY_rawInput.lower() == "low" or PRIORITY_rawInput.lower() == 'l':
-            PRIORITY = "Low "
+            PRIORITY = "LOW "
             break
         print("Invalid input. Please try again")
     return PRIORITY
                        
 
-    
 ####################################################
 # SORT_RECORD()
 # ##########	
@@ -394,9 +401,10 @@ def GET_PRIORITY():
 # History
 # 	Rev 1.0: 03/05/2022, Timothy van den Bosch
 #        Function complete
+#   Rev 1.1: 11/05/2022, Timothy van den Bosch
+#       Removed the extra priority medium
 ####################################################
 def SORT_RECORD():  
-    print("Sorting Diary:")
     if not(len(Diary) > 0):
         print("Diary is empty/nExiting sort:")
         return
@@ -450,41 +458,49 @@ def SORT_RECORD():
 #       (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
 #   Appends the string to array Diary[]
 # ##########
-# Author: --
-# Date: --
+# Author: Anthony Mann
+# Date: 07/05/2022
 # History
-# 	Rev --: --/--/----, --
-#        --
+# 	Rev 1.0: 07/05/2022, Anthony Mann
+#        Creates the record for the diary entry
+#   Rev 1.1: 11/05/2022, Timothy van den Bosch
+#           nested get date and time to allow for re-entry 
+#               of date when time given is in the past
+#           Added an exit condition to the date retrieval for leaveing the ADD_RECORD state
 ####################################################
 
-def ADD_RECORD():
-    while 1:
+def ADD_RECORD(loop):
+    LOOP=True;
+    while LOOP:
         while 1:
-            date = GET_DATE()
-            if date == False:
-                return
-            if VALIDATE_DATE(date) == True:
+            while 1:
+                while 1:
+                    date = GET_DATE()
+                    if date == False:
+                        return False
+                    if VALIDATE_DATE(date) == True:
+                        break
+            
+                startTime = GET_START_TIME()
+                endTime = GET_END_TIME()
+                if VALIDATE_TIME(startTime,endTime,date) == True: 
+                    break
+            if IS_CONCURRENT_APPOINTMENT(startTime,endTime,date) == False:
                 break
-        while 1:
-            startTime = GET_START_TIME()
-            endTime = GET_END_TIME()
-            if VALIDATE_TIME(startTime,endTime,date) == True: 
-                break
-        if IS_CONCURRENT_APPOINTMENT(startTime,endTime,date) == False:
-            break
-
-    descriptor = GET_DESCRIPTOR()
-    priority = GET_PRIORITY()
-    strStartTime = str(startTime)
-    if len(strStartTime) < 2:
-        strStartTime = '0' + strStartTime
-
-    strEndTime = str(endTime)
-    if len(strEndTime) < 2:
-        strEndTime = '0' + strEndTime
-
-    Diary.append(priority+';' + date+';' + strStartTime+';' + strEndTime+';' + descriptor)
-    PRINT_DIARY()
+    
+        descriptor = GET_DESCRIPTOR()
+        priority = GET_PRIORITY()
+        strStartTime = str(startTime)
+        if len(strStartTime) < 2:
+            strStartTime = '0' + strStartTime
+    
+        strEndTime = str(endTime)
+        if len(strEndTime) < 2:
+            strEndTime = '0' + strEndTime
+    
+        Diary.append(priority+';' + date+';' + strStartTime+';' + strEndTime+';' + descriptor)
+        PRINT_DIARY()
+        LOOP=loop
 
 ####################################################
 # PRINT_DIARY()
@@ -495,37 +511,195 @@ def ADD_RECORD():
 # 	None
 # ##########
 #   Prints the Diary Entries in a table format. 
-#   
-#   
+# ##########    
 # Author: Anthony Mann
 # Date: 07/05/2022
 # History
-# 	Rev1, 07/05/2022, Anthony Mann: Creates the record for the diary entry
+# 	Rev1, 07/05/2022, Anthony Mann: 
+#       Function complete
 ####################################################
-
-# Diary.append({"date": "23/05/1987", "StartTime": int(10), "EndTime": int(12), "Description": 'My B\'day','priority': 'High'})
-# print(Diary[0]["date"])
-
 def PRINT_DIARY():
-    # spaceBetween = "   "
-    # pHeader = "Priority"
-    # dHeader = "Date      "
-    # tSHeader = "Start"
-    # tEHeader = "End"
-    # dSHeader = "Description                     "
-    # header = pHeader + spaceBetween + dHeader + spaceBetween + tSHeader + spaceBetween + tEHeader + spaceBetween + dSHeader
-    # bar = '-' * len(pHeader) + spaceBetween + '-' * len(dHeader) + spaceBetween + '-' * len(tSHeader) + spaceBetween + '-' * len(tEHeader) + spaceBetween + '-' * len(dSHeader)
-    # print('\n' + header + '\n' + bar)
-    print("Priority   Date         Start   End   Description")
-    print("--------   ----------   -----   ---   --------------------------------")
     if len(Diary) > 0:
-        for entry in Diary:
-            print(entry[PRIORITY_START:PRIORITY_END]+"       "+ entry[DATE_START:DATE_END] +"   " + entry[STARTTIME_START:STARTTIME_END], "     " + entry[ENDTIME_START:ENDTIME_END] + "    " +entry[DISCRIPTION_START:DISCRIPTION_END])
+        print("Index    Priority   Date         Start   End   Description")
+        print("-----    --------   ----------   -----   ---   --------------------------------")
+        for index in range(0,len(Diary)):
+            strIndex = str(index)
+            while len(strIndex)<5:
+                strIndex=strIndex+" "
+            print(strIndex+"    "+Diary[index][PRIORITY_START:PRIORITY_END]+"       "+ Diary[index][DATE_START:DATE_END] +"   " + Diary[index][STARTTIME_START:STARTTIME_END], "     " + Diary[index][ENDTIME_START:ENDTIME_END] + "    " +Diary[index][DISCRIPTION_START:DISCRIPTION_END])
     else:
-        print('\n Select Add new record to create a new appointment')        
-
-
-
+        print('\n No entries in Diary\n Please select Add Record to create a new appointment')        
+####################################################
+# EDIT_RECORD()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	None
+# ##########
+#   edits a record. selection by user prompts.
+#   can edit indavidual items or the entir entry.
+#   Has date, time and concurancy checks 
+# ##########    
+# Author: Timothy van den Bosch
+# Date: 11/05/2022
+# History
+# 	Rev1, 07/05/2022, Timothy van den Bosch: 
+#       Function complete
+#################################################### 
+def EDIT_RECORD():
+    while 1:
+        valid = False
+        while valid == False:
+            valid = True
+            raw_input=input("Please enter the Index of the entry to edit ('end' to exit to menu)\n")
+            if raw_input.lower()=="end":
+                print("Exiting to menu")
+                return
+            for x in raw_input:
+                if not(ord(x) in range(48,58)):
+                    valid = False
+                    print("Invalid input format. Please try again")
+                    break
+            index = int(raw_input)
+            if index >= len(Diary):
+                valid = False
+                print("Invalid input. Index excieds Diary size")
+        #input valid
+        old_entry = Diary.pop(index)
+        
+        print("""
+        1. Priority
+        2. Time
+        3. Discription
+        4. All
+        """)
+        raw_input=input("What would you like to edit?\n")
+        if raw_input == "1":
+            print("\n Editing Priority")
+            priority = GET_PRIORITY()
+            old_entry = priority +';'+ old_entry[DATE_START:]
+            Diary.insert(index, old_entry)
+            PRINT_DIARY()
+        elif raw_input == "2":
+            print("\n Editing Time")
+            while 1:
+                while 1:
+                    while 1:
+                        date = GET_DATE()
+                        if date == False:
+                            return False
+                        if VALIDATE_DATE(date) == True:
+                            break
+                
+                    startTime = GET_START_TIME()
+                    endTime = GET_END_TIME()
+                    if VALIDATE_TIME(startTime,endTime,date) == True: 
+                        break
+                if IS_CONCURRENT_APPOINTMENT(startTime,endTime,date) == False:
+                    break
+            strStartTime = str(startTime)
+            if len(strStartTime) < 2:
+                strStartTime = '0' + strStartTime
+        
+            strEndTime = str(endTime)
+            if len(strEndTime) < 2:
+                strEndTime = '0' + strEndTime
+            old_entry = old_entry[:DATE_START]+date+';'+strStartTime+';'+strEndTime+';'+old_entry[DISCRIPTION_START:]
+            Diary.insert(index, old_entry)
+            PRINT_DIARY()
+        elif Menu_Response_rawInput == "3":
+            print("\n Editing Discription")
+            discription = GET_DESCRIPTOR()
+            old_entry = old_entry[:DISCRIPTION_START]+discription
+            Diary.insert(index, old_entry)
+            PRINT_DIARY()
+        elif raw_input == "4":
+            print("\n Editing All")
+            if ADD_RECORD(False) == False:
+                print("Edit aborted!")
+                Diary.insert(index, old_entry)
+        else:
+            print("\n I\'m sorry that response is not recognised please try again")
+        
+####################################################
+# REMOVE_RECORDS()
+# ##########	
+# inputs:
+#   None
+# outputs:
+# 	None
+# ##########
+#   removes records. selection by user prompts.
+#   can 'clean' records. (i.e. deletes records that are in the past) 
+# ##########    
+# Author: Timothy van den Bosch
+# Date: 11/05/2022
+# History
+# 	Rev1, 07/05/2022, Timothy van den Bosch: 
+#       Function complete
+#################################################### 
+def REMOVE_RECORDS():
+    while 1:
+        valid = False
+        while valid == False:
+            valid = True
+            raw_input=input("Please enter the Index of the entry to delete \n\t'clean' to remove dates that have past\n\t'end' to exit to menu\n")
+            if raw_input.lower()=="end":
+                print("Exiting to menu")
+                return
+            elif raw_input.lower()=="clean":
+                break
+            else:
+                for x in raw_input:
+                    if not(ord(x) in range(48,58)):
+                        valid = False
+                        print("Invalid input format. Please try again")
+                        break
+                if valid ==True:
+                    index = int(raw_input)
+                    if index >= len(Diary):
+                        valid = False
+                        print("Invalid input. Index excieds Diary size")
+        #input valid
+        if raw_input.lower()=="clean":
+            for index in range(0, len(Diary)):
+                date = Diary[index][DATE_START:DATE_END]
+                start = int(Diary[index][STARTTIME_START:STARTTIME_END])
+                DDay = int(date[DAY_START:DAY_END])-time.localtime().tm_mday
+                DMonth = int(date[MONTH_START:MONTH_END])-time.localtime().tm_mon
+                DYear = int(date[YEAR_START:YEAR_END])-time.localtime().tm_year
+                DStart = start-time.localtime().tm_hour
+                past = True
+                if DYear > 0:
+                    past = False
+                if DYear==0: 
+                    if DMonth>0:
+                        past = False
+                    if DMonth==0:
+                        if DDay>0:
+                            past = False
+                        if DDay==0:
+                            if DStart > 0:
+                                past = False
+                if past == True:
+                    Diary.pop(index)
+        else:
+            print("Delete entry?")
+            print("Index    Priority   Date         Start   End   Description")
+            print("-----    --------   ----------   -----   ---   --------------------------------")
+            strIndex = str(index)
+            while len(strIndex)<5:
+                strIndex=strIndex+" "
+            print(strIndex+"    "+Diary[index][PRIORITY_START:PRIORITY_END]+"       "+ Diary[index][DATE_START:DATE_END] +"   " + Diary[index][STARTTIME_START:STARTTIME_END], "     " + Diary[index][ENDTIME_START:ENDTIME_END] + "    " +Diary[index][DISCRIPTION_START:DISCRIPTION_END])
+            raw_input=input("Y/N?\n")
+            if raw_input.lower() == "yes" or raw_input.lower() == "y" :
+                Diary.pop(index)
+                print("Entry deleted")
+            else:
+                print("Delete aborted")
+        PRINT_DIARY()
+    
 ####################################################
 # Menu (Not a Function)	
 # ##########
@@ -536,30 +710,37 @@ def PRINT_DIARY():
 # Author: Anthony Mann
 # Date: 02/05/2022
 # History
-# 	Rev1, 02/05/2022, Anthony Mann: Creates the record for the diary entry
+# 	Rev1, 02/05/2022, Anthony Mann: 
+#       Function complete
 ####################################################
 
 while 1:
-    menu=True
-    while menu:
-           
-        print("""
-        1. Add Record
-        2. Sort Records
-        3. Exit
-        """)
-
-        Menu_Response_rawInput=input("Dear Diary, I would like to: \n")
-        if Menu_Response_rawInput == "1":
-            print("\n Adding A Record")
-            ADD_RECORD()
-        elif Menu_Response_rawInput == "2":
-            print("\n Sorting Your Records")
-            SORT_RECORD()
-        elif Menu_Response_rawInput == "3":
-            print("\n Thanks for using Dear Diary, see you next time \n")
-            break
-        else:
-            print("\n I\'m sorry that response is not recognised please try again")
+    PRINT_DIARY()
+    print("""
+    1. Add Record
+    2. Edit Records
+    3. Remove Records
+    4. Sort Records
+    5. Exit
+    """)
+    
+    Menu_Response_rawInput=input("Dear Diary, I would like to: \n")
+    if Menu_Response_rawInput == "1":
+        print("\n Adding A Record")
+        ADD_RECORD(True)
+    elif Menu_Response_rawInput == "2":
+        print("\n Editing Your Records")
+        EDIT_RECORD()
+    elif Menu_Response_rawInput == "3":
+        print("\n Delete Rocords")
+        REMOVE_RECORDS()
+    elif Menu_Response_rawInput == "4":
+        print("\n Sorting Your Records")
+        SORT_RECORD()
+    elif Menu_Response_rawInput == "5":
+        print("\n Thanks for using Dear Diary, see you next time \n")
+        break
+    else:
+        print("\n I\'m sorry that response is not recognised please try again")
         
 

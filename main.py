@@ -3,23 +3,23 @@
 import time
 ################
 ##Global Variables##
-#                 10        20        30        40 
+#                 10        20        30        40        50
 #       012345678901234567890123456789012345678901234567890123
-Diary=["MEDIUM;10/06/2022;07;22;Testing entry one             ",
-       "LOW   ;01/09/2022;12;22;Testing entry two             ",
-       "HIGH  ;20/07/2023;10;15;Testing entry three           "]
+Diary=["HIGH;10/06/2022;07;22;Testing entry one             ",
+       "LOW ;01/09/2022;12;22;Testing entry two             ",
+       "HIGH;20/07/2023;10;15;Testing entry three           "]
 
 ##constants##
 PRIORITY_START = 0
-PRIORITY_END = 6
-DATE_START = 7
-DATE_END = 17
-STARTTIME_START = 18
-STARTTIME_END = 20
-ENDTIME_START = 21
-ENDTIME_END = 23
-DISCRIPTION_START = 24
-DISCRIPTION_END = 44
+PRIORITY_END = 4
+DATE_START = 5
+DATE_END = 15
+STARTTIME_START = 16
+STARTTIME_END = 18
+ENDTIME_START = 19
+ENDTIME_END = 21
+DISCRIPTION_START = 22
+DISCRIPTION_END = 52
 DAY_START = 0
 DAY_END = 2
 MONTH_START = 3
@@ -143,8 +143,10 @@ def GET_DATE():
     while(1):
         Valid = True
         #retreive date
-        Date_rawInput = input("Please enter the date of the event (dd/mm/yyyy)\n")
+        Date_rawInput = input("Please enter the date of the event (dd/mm/yyyy) (type 'end' to exit to menu)\n")
         #varify input format
+        if Date_rawInput == "end":
+            return False
         if len(Date_rawInput)==10:
             for x in [0,1,3,4,6,7,8,9]:
                 if not(ord(Date_rawInput[x]) in range(48,58)):
@@ -214,9 +216,9 @@ def DAYS_IN_MONTH(month, year):
 ####################################################
 
 def VALIDATE_DATE(date):
-    year = int(date[6:10])
-    month = int(date[3:5])
-    day = int(date[:2])
+    year = int(date[YEAR_START:YEAR_END])
+    month = int(date[MONTH_START:MONTH_END])
+    day = int(date[DAY_START:DAY_END])
     if year > 2021 and year < 10000:
         if month > 0 and month < 13:
             if day <= DAYS_IN_MONTH(month, year):
@@ -331,7 +333,7 @@ def GET_DESCRIPTOR():
         #varify input format
         if len(DESCRIPTOR_rawInput)<=30:
             while len(DESCRIPTOR_rawInput)<30:
-                DESCRIPTOR_rawInput=DESCRIPTOR_rawInput
+                DESCRIPTOR_rawInput=DESCRIPTOR_rawInput+' '
                 break
             break
         print("Too many charicters. Please try again")
@@ -358,16 +360,13 @@ def GET_DESCRIPTOR():
 def GET_PRIORITY():
     while(1):
         #retreive date
-        PRIORITY_rawInput = input("Please enter a priority for the event (High,Medium,Low)\n")
+        PRIORITY_rawInput = input("Please enter a priority for the event (High/Low)\n")
         #varify input format
         if PRIORITY_rawInput.lower() == "high" or PRIORITY_rawInput.lower() == 'h':
-            PRIORITY = "High  "
-            break
-        if PRIORITY_rawInput.lower() == "medium" or PRIORITY_rawInput.lower() == 'm':
-            PRIORITY = "Medium"
+            PRIORITY = "High"
             break
         if PRIORITY_rawInput.lower() == "low" or PRIORITY_rawInput.lower() == 'l':
-            PRIORITY = "Low   "
+            PRIORITY = "Low "
             break
         print("Invalid input. Please try again")
     return PRIORITY
@@ -410,12 +409,10 @@ def SORT_RECORD():
         elif argument_raw.lower()== "priority":
             #retrive relevent argument from diary. Quantify in new list to sort
             for diaryIndex in range(0,len(Diary)):
-                if Diary[diaryIndex][PRIORITY_START:PRIORITY_END] == "HIGH  ":
+                if Diary[diaryIndex][PRIORITY_START:PRIORITY_END] == "HIGH":
                     Qarg.append(1)
-                elif Diary[diaryIndex][PRIORITY_START:PRIORITY_END] == "MEDIUM":
-                    Qarg.append(2)
                 else:
-                    Qarg.append(3)
+                    Qarg.append(2)
         elif argument_raw.lower()== "time":
             for diaryIndex in range(0,len(Diary)):
                 date = Diary[diaryIndex][DATE_START:DATE_END]
@@ -449,7 +446,7 @@ def SORT_RECORD():
 #   Retrives event infomation from user using the GET_ functions. 
 #   Validiates the retreaved event infomation using the VALIDATE_ functions
 #   Creates a string describing the new event in the following format 
-#       "Priority[6];Date[10];start time[2];end time[2];discription[30]"
+#       "Priority[4];Date[10];start time[2];end time[2];discription[30]"
 #       (e.g "High  ;23/09/2022;09;10;CSC1401 class                 ")
 #   Appends the string to array Diary[]
 # ##########
@@ -464,10 +461,10 @@ def ADD_RECORD():
     while 1:
         while 1:
             date = GET_DATE()
+            if date == False:
+                return
             if VALIDATE_DATE(date) == True:
                 break
-            
-
         while 1:
             startTime = GET_START_TIME()
             endTime = GET_END_TIME()
@@ -510,19 +507,20 @@ def ADD_RECORD():
 # print(Diary[0]["date"])
 
 def PRINT_DIARY():
-    spaceBetween = "   "
-    pHeader = "Priority"
-    dHeader = "Date      "
-    tSHeader = "Start"
-    tEHeader = "End"
-    dSHeader = "Description                     "
-    header = pHeader + spaceBetween + dHeader + spaceBetween + tSHeader + spaceBetween + tEHeader + spaceBetween + dSHeader
-    bar = '-' * len(pHeader) + spaceBetween + '-' * len(dHeader) + spaceBetween + '-' * len(tSHeader) + spaceBetween + '-' * len(tEHeader) + spaceBetween + '-' * len(dSHeader)
-    print('\n' + header + '\n' + bar)
-
+    # spaceBetween = "   "
+    # pHeader = "Priority"
+    # dHeader = "Date      "
+    # tSHeader = "Start"
+    # tEHeader = "End"
+    # dSHeader = "Description                     "
+    # header = pHeader + spaceBetween + dHeader + spaceBetween + tSHeader + spaceBetween + tEHeader + spaceBetween + dSHeader
+    # bar = '-' * len(pHeader) + spaceBetween + '-' * len(dHeader) + spaceBetween + '-' * len(tSHeader) + spaceBetween + '-' * len(tEHeader) + spaceBetween + '-' * len(dSHeader)
+    # print('\n' + header + '\n' + bar)
+    print("Priority   Date         Start   End   Description")
+    print("--------   ----------   -----   ---   --------------------------------")
     if len(Diary) > 0:
         for entry in Diary:
-            print(entry[PRIORITY_START:PRIORITY_END]+"    "+ entry[DATE_START:DATE_END] +"   " + entry[STARTTIME_START:STARTTIME_END], "     " + entry[ENDTIME_START:ENDTIME_END] + "     " +entry[DISCRIPTION_START:DISCRIPTION_END])
+            print(entry[PRIORITY_START:PRIORITY_END]+"       "+ entry[DATE_START:DATE_END] +"   " + entry[STARTTIME_START:STARTTIME_END], "     " + entry[ENDTIME_START:ENDTIME_END] + "    " +entry[DISCRIPTION_START:DISCRIPTION_END])
     else:
         print('\n Select Add new record to create a new appointment')        
 
@@ -540,7 +538,6 @@ def PRINT_DIARY():
 # History
 # 	Rev1, 02/05/2022, Anthony Mann: Creates the record for the diary entry
 ####################################################
-
 
 while 1:
     menu=True

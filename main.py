@@ -551,91 +551,91 @@ def PRINT_DIARY():
 # 	Rev1, 07/05/2022, Timothy van den Bosch: 
 #       Function complete
 #################################################### 
-def EDIT_RECORD():
-    while 1:
-        #get inputs
-        valid = False
-        while valid == False:
-            valid = True
-            raw_input=input("Please enter the Index of the entry to edit ('end' to exit to menu)\n")
-            if raw_input.lower()=="end":
-                print("Exiting to menu")
-                return #exit function
-            for x in raw_input:
-                if not(ord(x) in range(48,58)):
-                    valid = False
-                    print("Invalid input format. Please try again")
-                    break
-            index = int(raw_input)
-            if index >= len(Diary):
-                valid = False
-                print("Invalid input. Index excieds Diary size")
+# def EDIT_RECORD():
+#     while 1:
+#         #get inputs
+#         valid = False
+#         while valid == False:
+#             valid = True
+#             raw_input=input("Please enter the Index of the entry to edit ('end' to exit to menu)\n")
+#             if raw_input.lower()=="end":
+#                 print("Exiting to menu")
+#                 return #exit function
+#             for x in raw_input:
+#                 if not(ord(x) in range(48,58)):
+#                     valid = False
+#                     print("Invalid input format. Please try again")
+#                     break
+#             index = int(raw_input)
+#             if index >= len(Diary):
+#                 valid = False
+#                 print("Invalid input. Index excieds Diary size")
         
-        #input valid
-        old_entry = Diary.pop(index)#pull out the entry to edit
-        print("What would you like to edit?")
-        print("""
-        1. Priority
-        2. Time
-        3. Discription
-        4. All
-        """)
-        raw_input=input("\n")
-        if raw_input == '1':
-            print("Editing Priority")
-            #get the new value
-            priority = GET_PRIORITY()
-            #update the poped entry with new data
-            old_entry = priority +';'+ old_entry[DATE_START:]
-            #re-insert into diary
-            Diary.insert(index, old_entry)
-            PRINT_DIARY()
-        elif raw_input == "2":
-            print("Editing Time")
-            while 1:#check concurrentsy
-                while 1:#get time and validate
-                    while 1:#get new date and validate
-                        date = GET_DATE()
-                        if date == False:
-                            return False
-                        if VALIDATE_DATE(date) == True:
-                            break
+#         #input valid
+#         old_entry = Diary.pop(index)#pull out the entry to edit
+#         print("What would you like to edit?")
+#         print("""
+#         1. Priority
+#         2. Time
+#         3. Discription
+#         4. All
+#         """)
+#         raw_input=input("\n")
+#         if raw_input == '1':
+#             print("Editing Priority")
+#             #get the new value
+#             priority = GET_PRIORITY()
+#             #update the poped entry with new data
+#             old_entry = priority +';'+ old_entry[DATE_START:]
+#             #re-insert into diary
+#             Diary.insert(index, old_entry)
+#             PRINT_DIARY()
+#         elif raw_input == "2":
+#             print("Editing Time")
+#             while 1:#check concurrentsy
+#                 while 1:#get time and validate
+#                     while 1:#get new date and validate
+#                         date = GET_DATE()
+#                         if date == False:
+#                             return False
+#                         if VALIDATE_DATE(date) == True:
+#                             break
                 
-                    startTime = GET_START_TIME()
-                    endTime = GET_END_TIME()
-                    if VALIDATE_TIME(startTime,endTime,date) == True: 
-                        break
-                if IS_CONCURRENT_APPOINTMENT(startTime,endTime,date) == False:
-                    break
-            #broke out of loops - inputs are valid
-            strStartTime = str(startTime)
-            if len(strStartTime) < 2:
-                strStartTime = '0' + strStartTime
-            strEndTime = str(endTime)
-            if len(strEndTime) < 2:
-                strEndTime = '0' + strEndTime
-            #update the poped entry with new data
-            old_entry = old_entry[:DATE_START]+date+';'+strStartTime+';'+strEndTime+';'+old_entry[DISCRIPTION_START:]
-            #re-insert into diary
-            Diary.insert(index, old_entry)
-            PRINT_DIARY()
-        elif raw_input == "3":
-            #get the new value
-            print("\n Editing Discription")
-            discription = GET_DESCRIPTOR()
-            #update the poped entry with new data
-            old_entry = old_entry[:DISCRIPTION_START]+discription
-            #re-insert into diary
-            Diary.insert(index, old_entry)
-            PRINT_DIARY()
-        elif raw_input == "4":
-            #everything is being replaced - delete entry and add a new one
-            print("\n Editing All")
-            if ADD_RECORD(False) == False:#if addition is aborted early re-insert old data
-                print("Edit aborted!")
-                Diary.insert(index, old_entry)
-        else:
-            print("\n I\'m sorry that response is not recognised please try again")
+#                     startTime = GET_START_TIME()
+#                     endTime = GET_END_TIME()
+#                     if VALIDATE_TIME(startTime,endTime,date) == True: 
+#                         break
+#                 if IS_CONCURRENT_APPOINTMENT(startTime,endTime,date) == False:
+#                     break
+#             #broke out of loops - inputs are valid
+#             strStartTime = str(startTime)
+#             if len(strStartTime) < 2:
+#                 strStartTime = '0' + strStartTime
+#             strEndTime = str(endTime)
+#             if len(strEndTime) < 2:
+#                 strEndTime = '0' + strEndTime
+#             #update the poped entry with new data
+#             old_entry = old_entry[:DATE_START]+date+';'+strStartTime+';'+strEndTime+';'+old_entry[DISCRIPTION_START:]
+#             #re-insert into diary
+#             Diary.insert(index, old_entry)
+#             PRINT_DIARY()
+#         elif raw_input == "3":
+#             #get the new value
+#             print("\n Editing Discription")
+#             discription = GET_DESCRIPTOR()
+#             #update the poped entry with new data
+#             old_entry = old_entry[:DISCRIPTION_START]+discription
+#             #re-insert into diary
+#             Diary.insert(index, old_entry)
+#             PRINT_DIARY()
+#         elif raw_input == "4":
+#             #everything is being replaced - delete entry and add a new one
+#             print("\n Editing All")
+#             if ADD_RECORD(False) == False:#if addition is aborted early re-insert old data
+#                 print("Edit aborted!")
+#                 Diary.insert(index, old_entry)
+#         else:
+#             print("\n I\'m sorry that response is not recognised please try again")
 
 ####################################################
 # REMOVE_RECORDS()
@@ -654,66 +654,66 @@ def EDIT_RECORD():
 # 	Rev1, 07/05/2022, Timothy van den Bosch: 
 #       Function complete
 #################################################### 
-def REMOVE_RECORDS():
-    while 1:
-        valid = False
-        while valid == False:
-            valid = True
-            raw_input=input("Please enter the Index of the entry to delete \n\t'clean' to remove dates that have past\n\t'end' to exit to menu\n")
-            if raw_input.lower()=="end":
-                print("Exiting to menu")
-                return
-            elif raw_input.lower()=="clean":
-                break
-            else:
-                for x in raw_input:
-                    if not(ord(x) in range(48,58)):
-                        valid = False
-                        print("Invalid input format. Please try again")
-                        break
-                if valid ==True:
-                    index = int(raw_input)
-                    if index >= len(Diary):
-                        valid = False
-                        print("Invalid input. Index excieds Diary size")
-        #input valid
-        if raw_input.lower()=="clean":
-            for index in range(0, len(Diary)-1):
-                date = Diary[index][DATE_START:DATE_END]
-                start = int(Diary[index][STARTTIME_START:STARTTIME_END])
-                DDay = int(date[DAY_START:DAY_END])-time.localtime().tm_mday
-                DMonth = int(date[MONTH_START:MONTH_END])-time.localtime().tm_mon
-                DYear = int(date[YEAR_START:YEAR_END])-time.localtime().tm_year
-                DStart = start-time.localtime().tm_hour
-                past = True
-                if DYear > 0:
-                    past = False
-                if DYear==0: 
-                    if DMonth>0:
-                        past = False
-                    if DMonth==0:
-                        if DDay>0:
-                            past = False
-                        if DDay==0:
-                            if DStart > 0:
-                                past = False
-                if past == True:
-                    Diary.pop(index)
-        else:
-            print("Delete entry?")
-            print("Index    Priority   Date         Start   End   Description")
-            print("-----    --------   ----------   -----   ---   --------------------------------")
-            strIndex = str(index)
-            while len(strIndex)<5:
-                strIndex=strIndex+" "
-            print(strIndex+"    "+Diary[index][PRIORITY_START:PRIORITY_END]+"       "+ Diary[index][DATE_START:DATE_END] +"   " + Diary[index][STARTTIME_START:STARTTIME_END], "     " + Diary[index][ENDTIME_START:ENDTIME_END] + "    " +Diary[index][DISCRIPTION_START:DISCRIPTION_END])
-            raw_input=input("Y/N?\n")
-            if raw_input.lower() == "yes" or raw_input.lower() == "y" :
-                Diary.pop(index)
-                print("Entry deleted")
-            else:
-                print("Delete aborted")
-        PRINT_DIARY()
+# def REMOVE_RECORDS():
+#     while 1:
+#         valid = False
+#         while valid == False:
+#             valid = True
+#             raw_input=input("Please enter the Index of the entry to delete \n\t'clean' to remove dates that have past\n\t'end' to exit to menu\n")
+#             if raw_input.lower()=="end":
+#                 print("Exiting to menu")
+#                 return
+#             elif raw_input.lower()=="clean":
+#                 break
+#             else:
+#                 for x in raw_input:
+#                     if not(ord(x) in range(48,58)):
+#                         valid = False
+#                         print("Invalid input format. Please try again")
+#                         break
+#                 if valid ==True:
+#                     index = int(raw_input)
+#                     if index >= len(Diary):
+#                         valid = False
+#                         print("Invalid input. Index excieds Diary size")
+#         #input valid
+#         if raw_input.lower()=="clean":
+#             for index in range(0, len(Diary)-1):
+#                 date = Diary[index][DATE_START:DATE_END]
+#                 start = int(Diary[index][STARTTIME_START:STARTTIME_END])
+#                 DDay = int(date[DAY_START:DAY_END])-time.localtime().tm_mday
+#                 DMonth = int(date[MONTH_START:MONTH_END])-time.localtime().tm_mon
+#                 DYear = int(date[YEAR_START:YEAR_END])-time.localtime().tm_year
+#                 DStart = start-time.localtime().tm_hour
+#                 past = True
+#                 if DYear > 0:
+#                     past = False
+#                 if DYear==0: 
+#                     if DMonth>0:
+#                         past = False
+#                     if DMonth==0:
+#                         if DDay>0:
+#                             past = False
+#                         if DDay==0:
+#                             if DStart > 0:
+#                                 past = False
+#                 if past == True:
+#                     Diary.pop(index)
+#         else:
+#             print("Delete entry?")
+#             print("Index    Priority   Date         Start   End   Description")
+#             print("-----    --------   ----------   -----   ---   --------------------------------")
+#             strIndex = str(index)
+#             while len(strIndex)<5:
+#                 strIndex=strIndex+" "
+#             print(strIndex+"    "+Diary[index][PRIORITY_START:PRIORITY_END]+"       "+ Diary[index][DATE_START:DATE_END] +"   " + Diary[index][STARTTIME_START:STARTTIME_END], "     " + Diary[index][ENDTIME_START:ENDTIME_END] + "    " +Diary[index][DISCRIPTION_START:DISCRIPTION_END])
+#             raw_input=input("Y/N?\n")
+#             if raw_input.lower() == "yes" or raw_input.lower() == "y" :
+#                 Diary.pop(index)
+#                 print("Entry deleted")
+#             else:
+#                 print("Delete aborted")
+#         PRINT_DIARY()
     
 ####################################################
 # Menu (Not a Function)	
@@ -744,10 +744,12 @@ while 1:
         ADD_RECORD(True)
     elif Menu_Response_rawInput == "2":
         print("\n Editing Your Records")
-        EDIT_RECORD()
+        print("Feature temporarily disabled")
+        #EDIT_RECORD()
     elif Menu_Response_rawInput == "3":
         print("\n Delete Rocords")
-        REMOVE_RECORDS()
+        print("Feature temporarily disabled")
+       # REMOVE_RECORDS()
     elif Menu_Response_rawInput == "4":
         print("\n Sorting Your Records")
         SORT_RECORD()
